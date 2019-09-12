@@ -1,0 +1,17 @@
+/proc下包含了内存的信息meminfo（总内存多大，可用内存多大，硬盘缓存区，文件缓存区.....）
+/proc下包含了cpu的信息cpuinfo (处理器的品牌，主频，核数.....)
+/proc下包含了cpu每个核的状态信息　stat (用户态运行时间，内核态运行时间，io等待时间，用户态时间（nice>0,低优先级），硬中断时间，软中断时间，空闲时间)
+
+/proc/pid　此目录下包含　pid　＝　pid的进程的所有信息。
+/proc/pid/stat　此文件包含此进程的状态信息　（进程的状态（SLEEP,RUNNING,ZOMBIE..）,内存使用情况，cpu使用情况....）。需要通过命令：man 5 /proc来详细查看字节含义
+/proc/pid/status 此文件包含进程的内存峰值的状态信息，cpu使用情况等等。且显示更人性化。
+
+计算cpu占用率：proc/pid/stat统计出　用户态时间，内核态时间，用户态等待时间，内核态等待时间,相加记为　user_time。　proc/stst　统计出
+(用户态运行时间，内核态运行时间，io等待时间，用户态时间（nice>0,低优先级），硬中断时间，软中断时间，空闲时间) 相加记为 all_time。
+cpu_rate = user_time / all_time * 100 * 内核的核数;
+
+top计算的mem占用率：　proc/pid/status 得到进程的内存使用峰值记为res_pk,　在proc/meminfo下得到总内存大小记为tot_mem;
+mem_rate = res_pk / tot_mem * 100;
+
+实时mem占用率：proc/pid/stat　得到进程的内存使用峰值记为res,　在proc/meminfo下得到总内存大小记为tot_mem;
+mem_rate = res / tot_mem * 100;
